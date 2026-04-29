@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}讀書計畫管理系統{% endblock %}</title>
+    <!-- 將引入靜態 CSS -->
+</head>
+<body>
+    <header>
+        <h1>讀書計畫管理系統</h1>
+        <nav>
+            <a href="/">首頁</a> |
+            <a href="/stats">進度統計</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2026 讀書計畫管理系統</p>
+    </footer>
+
+    <!-- 將引入靜態 JS -->
+</body>
+</html>
