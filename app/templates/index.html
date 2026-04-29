@@ -3,17 +3,74 @@
 {% block title %}首頁 - 任務列表 | 讀書計畫管理系統{% endblock %}
 
 {% block content %}
-    <h2>任務列表</h2>
-    
-    <!-- 新增任務表單區塊骨架 -->
-    <section class="add-task-form">
-        <h3>新增讀書任務</h3>
-        <!-- Form 實作將寫在這裡 -->
-    </section>
+<div class="row g-4">
+    <!-- 新增任務表單 -->
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 glass-card h-100">
+            <div class="card-body p-4">
+                <h4 class="card-title fw-bold mb-4 text-dark">✨ 新增讀書任務</h4>
+                <form action="/tasks/add" method="POST">
+                    <div class="mb-3">
+                        <label for="subject" class="form-label text-muted">科目</label>
+                        <input type="text" class="form-control bg-light border-0" id="subject" name="subject" placeholder="例如：數學、英文" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="title" class="form-label text-muted">任務內容</label>
+                        <input type="text" class="form-control bg-light border-0" id="title" name="title" placeholder="例如：完成第二章習題" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="due_date" class="form-label text-muted">預定完成日期</label>
+                        <input type="date" class="form-control bg-light border-0" id="due_date" name="due_date" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 fw-semibold rounded-pill py-2 shadow-sm btn-hover-anim">新增任務</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    <!-- 任務清單區塊骨架 -->
-    <section class="task-list">
-        <h3>目前任務</h3>
-        <!-- List 實作將寫在這裡 -->
-    </section>
+    <!-- 任務清單 -->
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-4">
+                <h4 class="card-title fw-bold mb-4 text-dark">📋 目前任務清單</h4>
+                
+                {% if tasks %}
+                    <div class="list-group list-group-flush gap-2">
+                        {% for task in tasks %}
+                            <div class="list-group-item d-flex justify-content-between align-items-center border rounded shadow-sm task-item {{ 'bg-light' if task.is_completed else '' }}">
+                                <div class="d-flex align-items-center gap-3">
+                                    <form action="/tasks/{{ task.id }}/toggle" method="POST" class="m-0 toggle-form">
+                                        <div class="form-check m-0">
+                                            <input class="form-check-input fs-4 toggle-checkbox cursor-pointer" type="checkbox" onChange="this.form.submit()" {% if task.is_completed %}checked{% endif %}>
+                                        </div>
+                                    </form>
+                                    <div>
+                                        <h6 class="mb-1 fw-bold {{ 'text-decoration-line-through text-muted' if task.is_completed else 'text-dark' }}">
+                                            <span class="badge bg-secondary me-2">{{ task.subject }}</span>
+                                            {{ task.title }}
+                                        </h6>
+                                        <small class="text-muted">
+                                            📅 期限: {{ task.due_date }}
+                                        </small>
+                                    </div>
+                                </div>
+                                <form action="/tasks/{{ task.id }}/delete" method="POST" class="m-0" onsubmit="return confirm('確定要刪除此任務嗎？');">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-circle delete-btn" title="刪除">
+                                        ❌
+                                    </button>
+                                </form>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <div class="fs-1 mb-3">📭</div>
+                        <h5>目前沒有任何任務</h5>
+                        <p>快去左側新增一個讀書目標吧！</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
